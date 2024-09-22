@@ -33,8 +33,8 @@ include '../../action/security.php';
                             <div class="card-body">
                                 <form action="" method="get">
                                     <div class="input-group mb-3">
-                                        <input type="text" class="form-control" placeholder="Search Produk" name="search">
-                                        <button class="btn btn-primary" type="submit">Search</button>
+                                        <input type="text" class="form-control" placeholder="Cari Produk" name="search">
+                                        <button class="btn btn-primary" type="submit">Cari</button>
                                     </div>
                                 </form>
                             </div>
@@ -43,19 +43,24 @@ include '../../action/security.php';
                     <?php
                     include '../../connection/connection.php';
                     
-                    $query = "SELECT * FROM produk";
+                    if(isset($_GET['search']) && !empty($_GET['search'])) {
+                        $search = $_GET['search'];
+                        $query = "SELECT * FROM produk WHERE nama LIKE '%$search%'";
+                    } else {
+                        $query = "SELECT * FROM produk";
+                    }
                     $result = mysqli_query($conn, $query);
                     
                     while ($row = mysqli_fetch_assoc($result)) {
                     ?>
                     <div class="col-sm-6 col-xl-3">
-                        <div class="card overflow-hidden rounded-2">
+                        <div class="card overflow-hidden rounded-2 h-100 d-flex">
                             <div class="position-relative">
-                                <a href="./detail_produk.php?id=<?php echo $row['id']; ?>"><img src="../../assets/images/produk/<?php echo $row['foto']; ?>" class="card-img-top rounded-0" alt="<?php echo $row['nama_produk']; ?>"></a>
+                                <a href="./detail_produk.php?id=<?php echo $row['id']; ?>"><img src="../../assets/images/produk/<?php echo $row['foto_produk']; ?>" class="card-img-top rounded-0" alt="<?php echo $row['nama']; ?>"></a>
                                 <a href="javascript:void(0)" class="bg-primary rounded-circle p-2 text-white d-inline-flex position-absolute bottom-0 end-0 mb-n3 me-3" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add To Cart"><i class="ti ti-basket fs-4"></i></a>
                             </div>
-                            <div class="card-body pt-3 p-4">
-                                <h6 class="fw-semibold fs-4"><?php echo $row['nama_produk']; ?></h6>
+                            <div class="card-body pt-3 p-4 mt-auto">
+                                <h6 class="fw-semibold fs-4"><?php echo $row['nama']; ?></h6>
                                 <div class="d-flex align-items-center justify-content-between">
                                     <h6 class="fw-semibold fs-4 mb-0">Rp <?php echo number_format($row['harga'], 0, ',', '.'); ?></h6>
                                     <ul class="list-unstyled d-flex align-items-center mb-0">
@@ -63,16 +68,16 @@ include '../../action/security.php';
                                         for ($i = 1; $i <= 5; $i++) {
                                             echo '<li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>';
                                         }
-                                        <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                                        <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                                        <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                                        <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                                        <li><a class="" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
+                                        ?>
                                     </ul>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <?php
+                    }
+                    mysqli_close($conn);
+                    ?>
                 </div>
             </div>
         </div>

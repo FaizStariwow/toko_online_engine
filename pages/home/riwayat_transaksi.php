@@ -74,7 +74,6 @@
                                             ?>
                                                 <tr>
                                                     <td><?= $no++ ?></td>
-                                                    <td><?= $data['pembeli'] ?></td>
                                                     <td><?= $data['produk'] ?></td>
                                                     <td><?= $data['tgl_transaksi'] ?></td>
                                                     <td><?= $data['total_harga'] ?></td>
