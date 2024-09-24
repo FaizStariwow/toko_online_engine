@@ -45,19 +45,33 @@ include '../../action/security.php';
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td><img src="../../assets/images/produk/foto_1.webp" alt="" width="100" height="100"></td>
-                                                <td>100000</td>
-                                                <td>
-                                                    <button class="btn btn-primary mx-3"><i class="ti ti-minus"></i></button>
-                                                    <input class="form-control" type="text" name="" id="" style="width: 40px;">
-                                                    <button class="btn btn-primary mx-3"><i class="ti ti-plus"></i></button>
-                                                </td>
-                                                <td>Rp 200000</td>
-                                                <td>
-                                                    <button class="btn btn-primary"><i class="ti ti-trash"></i></button>
-                                                </td>
-                                            </tr>
+                                            <?php
+                                            include '../../connection/connection.php';
+                                            $user_id = $_SESSION['id'];
+                                            $sql = "SELECT k.*, p.nama, p.foto_produk, p.harga FROM keranjang k JOIN produk p ON k.produk_id = p.id WHERE k.user_id = '$user_id'";
+                                            $result = $conn->query($sql);
+                                            if ($result->num_rows > 0) {
+                                                while($row = $result->fetch_assoc()) {
+                                                    echo "<tr>
+                                                        <td><img src='../../assets/images/produk/{$row['foto_produk']}' alt='' width='100' height='100'></td>
+                                                        <td>Rp " . number_format($row['harga'], 0, ',', '.') . "</td>
+                                                        <td>
+                                                            <div class='d-flex'>
+                                                                <button class='btn btn-primary mx-3'><i class='ti ti-minus'></i></button>
+                                                                <input class='form-control' type='text' name='qty' id='qty' style='width: 40px;' value='{$row['jumlah']}'>
+                                                                <button class='btn btn-primary mx-3'><i class='ti ti-plus'></i></button>
+                                                            </div>
+                                                        </td>
+                                                        <td>Rp " . number_format($row['total_harga'], 0, ',', '.') . "</td>
+                                                        <td>
+                                                            <button class='btn btn-primary'><i class='ti ti-trash'></i></button>
+                                                        </td>
+                                                    </tr>";
+                                                }
+                                            } else {
+                                                echo "<tr><td colspan='5'>Keranjang kosong</td></tr>";
+                                            }
+                                            ?>
                                         </tbody>
                                     </table>
                                 </div>
@@ -72,17 +86,25 @@ include '../../action/security.php';
                             <div class="card-body">
                                 <div class="d-flex justify-content-between mb-3 pt-1">
                                     <h6 class="font-weight-medium">Subtotal</h6>
-                                    <h6 class="font-weight-medium">$150</h6>
+                                    <h6 class="font-weight-medium">
+                                        <?php
+                                        $user_id = $_SESSION['id'];
+                                        $sql_total = "SELECT SUM(total_harga) AS total FROM keranjang WHERE user_id = '$user_id'";
+                                        $result_total = $conn->query($sql_total);
+                                        $row_total = $result_total->fetch_assoc();
+                                        echo "Rp " . number_format($row_total['total'], 0, ',', '.');
+                                        ?>
+                                    </h6>
                                 </div>
-                                <div class="d-flex justify-content-between">
+                                <!-- <div class="d-flex justify-content-between">
                                     <h6 class="font-weight-medium">Shipping</h6>
                                     <h6 class="font-weight-medium">$10</h6>
-                                </div>
+                                </div> -->
                             </div>
                             <div class="card-footer border-secondary bg-transparent">
                                 <div class="d-flex justify-content-between mt-2">
                                     <h5 class="font-weight-bold">Total</h5>
-                                    <h5 class="font-weight-bold">$160</h5>
+                                    <h5 class="font-weight-bold"><?= "Rp " . number_format($row_total['total'], 0, ',', '.'); ?></h5>
                                 </div>
                                 <div class="d-flex ">
                                     <button class="btn btn-primary">Checkout</button>
@@ -101,6 +123,22 @@ include '../../action/security.php';
     <script src="../../assets/js/sidebarmenu.js"></script>
     <script src="../../assets/js/app.min.js"></script>
     <script src="../../assets/libs/simplebar/dist/simplebar.js"></script>
+    <script>
+        $(document).ready(function() {
+            var qty = 1; 
+            $('#plus').click(function() {
+                qty += 1;
+                $('#qty').val(qty);
+            });
+            
+            $('#minus').click(function() {
+                if (qty > 1){
+                    qty -= 1;
+                    $('#qty').val(qty);
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

@@ -19,7 +19,7 @@
               <!-- <a href="https://adminmart.com/product/modernize-free-bootstrap-admin-dashboard/" target="_blank" class="btn btn-primary">Download Free</a> -->
               <?php if($_SESSION['role'] == 2){?>
                 <li class="nav-item">
-              <a class="nav-link nav-icon-hover" href="javascript:void(0)">
+              <a class="nav-link nav-icon-hover" href="../home/cart.php">
                 <i class="ti ti-shopping-cart"></i>
                 <div class="notification bg-primary rounded-circle"></div>
               </a>

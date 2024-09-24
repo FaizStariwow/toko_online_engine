@@ -56,7 +56,7 @@ include '../../action/security.php';
                     <div class="col-sm-6 col-xl-3">
                         <div class="card overflow-hidden rounded-2 h-100 d-flex">
                             <div class="position-relative">
-                                <a href="./detail_produk.php?id=<?php echo $row['id']; ?>"><img src="../../assets/images/produk/<?php echo $row['foto_produk']; ?>" class="card-img-top rounded-0" alt="<?php echo $row['nama']; ?>"></a>
+                                <a href="./detail_produk.php?id=<?= $row['id'] ?>"><img src="../../assets/images/produk/<?php echo $row['foto_produk']; ?>" class="card-img-top rounded-0" alt="<?php echo $row['nama']; ?>"></a>
                                 <a href="javascript:void(0)" class="bg-primary rounded-circle p-2 text-white d-inline-flex position-absolute bottom-0 end-0 mb-n3 me-3" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add To Cart"><i class="ti ti-basket fs-4"></i></a>
                             </div>
                             <div class="card-body pt-3 p-4 mt-auto">
