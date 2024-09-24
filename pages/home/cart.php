@@ -48,25 +48,27 @@ include '../../action/security.php';
                                             <?php
                                             include '../../connection/connection.php';
                                             $user_id = $_SESSION['id'];
-                                            $sql = "SELECT k.*, p.nama, p.foto_produk, p.harga FROM keranjang k JOIN produk p ON k.produk_id = p.id WHERE k.user_id = '$user_id'";
+                                            $sql = "select keranjang.id AS keranjang_id, produk.id, produk.nama as produk, keranjang.jumlah, keranjang.total_harga, produk.foto_produk, produk.harga from keranjang join produk on keranjang.produk_id = produk.id";
                                             $result = $conn->query($sql);
                                             if ($result->num_rows > 0) {
                                                 while($row = $result->fetch_assoc()) {
-                                                    echo "<tr>
-                                                        <td><img src='../../assets/images/produk/{$row['foto_produk']}' alt='' width='100' height='100'></td>
-                                                        <td>Rp " . number_format($row['harga'], 0, ',', '.') . "</td>
-                                                        <td>
-                                                            <div class='d-flex'>
-                                                                <button class='btn btn-primary mx-3'><i class='ti ti-minus'></i></button>
-                                                                <input class='form-control' type='text' name='qty' id='qty' style='width: 40px;' value='{$row['jumlah']}'>
-                                                                <button class='btn btn-primary mx-3'><i class='ti ti-plus'></i></button>
-                                                            </div>
-                                                        </td>
-                                                        <td>Rp " . number_format($row['total_harga'], 0, ',', '.') . "</td>
-                                                        <td>
-                                                            <button class='btn btn-primary'><i class='ti ti-trash'></i></button>
-                                                        </td>
-                                                    </tr>";
+                                            ?>
+                                            <tr>
+                                                <td><img src="../../assets/images/produk/<?php echo $row['foto_produk']; ?>" alt="" width="100" height="100"></td>
+                                                <td>Rp <?php echo number_format($row['harga'], 0, ',', '.'); ?></td>
+                                                <td>
+                                                    <div class="d-flex">
+                                                        <button class="btn btn-primary mx-3"><i class="ti ti-minus"></i></button>
+                                                        <input class="form-control" type="text" name="qty" id="qty" style="width: 40px;" value="<?= $row['jumlah']; ?>">
+                                                        <button class="btn btn-primary mx-3"><i class="ti ti-plus"></i></button>
+                                                    </div>
+                                                </td>
+                                                <td>Rp <?php echo number_format($row['total_harga'], 0, ',', '.'); ?></td>
+                                                <td>
+                                                <a href="../../action/dashboard/delete_cart.php?id=<?= $row['keranjang_id'] ?>" class="btn btn-danger" onclick="return confirm('Apakah Anda Yakin Ingin Menghapus Data Ini?')"><i class="ti ti-trash"></i></a>
+                                                </td>
+                                            </tr>
+                                            <?php
                                                 }
                                             } else {
                                                 echo "<tr><td colspan='5'>Keranjang kosong</td></tr>";
@@ -123,22 +125,7 @@ include '../../action/security.php';
     <script src="../../assets/js/sidebarmenu.js"></script>
     <script src="../../assets/js/app.min.js"></script>
     <script src="../../assets/libs/simplebar/dist/simplebar.js"></script>
-    <script>
-        $(document).ready(function() {
-            var qty = 1; 
-            $('#plus').click(function() {
-                qty += 1;
-                $('#qty').val(qty);
-            });
-            
-            $('#minus').click(function() {
-                if (qty > 1){
-                    qty -= 1;
-                    $('#qty').val(qty);
-                }
-            });
-        });
-    </script>
+   
 </body>
 
 </html>

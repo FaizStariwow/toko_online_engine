@@ -55,8 +55,6 @@ include '../../action/dashboard/show_detail_produk.php';
                                  <input class="form-control" type="text" name="qty" id="qty" style="width: 50px;" value="1">
                                  <button class="btn btn-primary mx-3" type="button" id="plus"><i class="ti ti-plus"></i></button>
                                  <button class="btn btn-primary px-3" type="submit"><i class="ti ti-shopping-cart mr-1"></i> Add To Cart</button>
-
-                                <input type="hidden" name="user_id" value="<?= $_SESSION['id'] ?>">
                                 <input type="hidden" name="id" value="<?= $data['id']?>">
                                 <input type="hidden" name="harga" value="<?= $data['harga']?>">
                              </form>
