@@ -32,17 +32,17 @@ include '../../action/security.php';
                 <div class="row">
                     <!-- Form Checkout -->
                     <div class="col-md-8">
-                        <form action="proses_checkout.php" method="POST">
+                        <form action="../../action/dashboard/checkout_act.php" method="POST">
                             <!-- Informasi Pengguna -->
                             <h4 class="mb-3">Informasi Pengguna</h4>
                             <div class="row g-3">
                                 <div class="col-sm-12">
                                     <label for="firstName" class="form-label">Nama Lengkap</label>
-                                    <input type="text" class="form-control" id="firstName" name="first_name" value="<?= $_SESSION['nama']?>" readonly required>
+                                    <input type="text" class="form-control" id="firstName" name="first_name" value="<?= $_SESSION['nama'] ?>" readonly required>
                                 </div>
                                 <div class="col-12">
                                     <label for="email" class="form-label">Email</label>
-                                    <input type="email" class="form-control" id="email" name="email" value="<?= $_SESSION['email']?>" readonly required>
+                                    <input type="email" class="form-control" id="email" name="email" value="<?= $_SESSION['email'] ?>" readonly required>
                                 </div>
                                 <div class="col-12">
                                     <label for="phone" class="form-label">Nomor Telepon</label>
@@ -57,55 +57,42 @@ include '../../action/security.php';
                                     <label for="address" class="form-label">Alamat</label>
                                     <input type="text" class="form-control" id="address" name="address" placeholder="Alamat lengkap" required>
                                 </div>
-
                                 <div class="col-sm-6">
                                     <label for="city" class="form-label">Kota</label>
                                     <input type="text" class="form-control" id="city" name="city" required>
                                 </div>
-
                                 <div class="col-sm-6">
                                     <label for="postalCode" class="form-label">Kode Pos</label>
-                                    <input type="text" class="form-control" id="postalCode" name="postal_code" required>
+                                    <input type="text" class="form-control" id="postalcode" name="postalcode" required>
                                 </div>
-
                                 <div class="col-sm-6">
                                     <label for="province" class="form-label">Provinsi</label>
-                                    <select class="form-select" id="province" name="province" required>
-                                        <option value="">Pilih...</option>
-                                        <option value="Jawa Barat">Jawa Barat</option>
-                                        <option value="Jawa Tengah">Jawa Tengah</option>
-                                        <option value="Jawa Timur">Jawa Timur</option>
-                                        <option value="DKI Jakarta">DKI Jakarta</option>
-                                        <option value="Banten">Banten</option>
-                                        <option value="Yogyakarta">Yogyakarta</option>
-                                    </select>
+                                    <input type="text" class="form-control" id="province" name="province" required>
                                 </div>
                             </div>
 
                             <!-- Metode Pembayaran -->
                             <h4 class="mb-3 mt-4">Metode Pembayaran</h4>
                             <div class="my-3">
-                                <?php 
-                                 include '../../action/pembayaran/show_data.php';
+                                <?php
+                                include '../../action/pembayaran/show_data.php';
 
-                                 while($pembayaran = mysqli_fetch_assoc($result)){
+                                while ($pembayaran = mysqli_fetch_assoc($result)) {
                                 ?>
-                                <div class="form-check">
-                                    <input id="<?= $pembayaran['nama']?>" name="pembayaran" type="radio" class="form-check-input" value="<?= $pembayaran['id']?>" required>
-                                    <label class="form-check-label" for="credit"><?= $pembayaran['nama']?></label>
-                                </div>
-                                <?php }?>
+                                    <div class="form-check">
+                                        <input id="<?= $pembayaran['nama'] ?>" name="pembayaran" type="radio" class="form-check-input" value="<?= $pembayaran['id'] ?>" required>
+                                        <label class="form-check-label" for="credit"><?= $pembayaran['nama'] ?></label>
+                                    </div>
+                                <?php } ?>
                             </div>
 
                             <!-- Tombol Submit -->
-                            <button class="w-100 btn btn-primary btn-lg mt-3" type="submit">Lanjutkan Pembayaran</button>
-                        </form>
                     </div>
 
                     <!-- Ringkasan Pesanan -->
                     <div class="col-md-4">
                         <h4 class="d-flex justify-content-between align-items-center mb-3">
-                            <?php 
+                            <?php
                             include '../../action/dashboard/show_list.php';
 
 
@@ -115,38 +102,42 @@ include '../../action/security.php';
                             $tot = mysqli_fetch_assoc($totalHarga);
                             ?>
                             <span class="text-muted">Ringkasan Pesanan</span>
-                            <span class="badge bg-primary rounded-pill"><?= $jml['jml']?></span>
+                            <span class="badge bg-primary rounded-pill"><?= $jml['jml'] ?></span>
                         </h4>
                         <ul class="list-group mb-3">
-                            <?php 
-                                $produkId=[];
-                                while($data = mysqli_fetch_assoc($result)){
+                            <?php
+                            $produkId = [];
+                            $jmlBeli = [];
+                            while ($data = mysqli_fetch_assoc($result)) {
                             ?>
-                            <li class="list-group-item d-flex justify-content-between lh-sm">
-                                <div>
-                                    <h6 class="my-0"><?= $data['produk']?></h6>
-                                    <small class="text-muted"><?= $data['deskripsi']?></small>
-                                </div>
-                                <span class="text-muted">Rp <?= number_format($data['total_harga'], 0, ',', '.')?></span>
-                            </li>
-                            <?php array_push($produkId, $data['id']); }?>
+                                <li class="list-group-item d-flex justify-content-between lh-sm">
+                                    <div>
+                                        <h6 class="my-0"><?= $data['produk'] ?></h6>
+                                        <small class="text-muted"><?= $data['deskripsi'] ?></small>
+                                    </div>
+                                    <span class="text-muted">Rp <?= number_format($data['total_harga'], 0, ',', '.') ?></span>
+                                </li>
+                            <?php
+                                array_push($jmlBeli, $data['jumlah']);
+                                array_push($produkId, $data['id']);
+                            } ?>
                             <li class="list-group-item d-flex justify-content-between">
                                 <span>Total (IDR)</span>
-                                <strong>Rp <?= $tot['tot'] == true ? number_format($tot['tot'], 0, ',', '.') : 0?></strong>
+                                <strong>Rp <?= $tot['tot'] == true ? number_format($tot['tot'], 0, ',', '.') : 0 ?></strong>
                             </li>
                         </ul>
-                        <input type="hidden" name="produk_id" value="<?= $data['id']?>">
-                        <input type="hidden" name="total_harga" value="<?=$tot['tot']?>">
-                        <input type="hidden" name="produkId" value="<?= implode(',',$produkId)?>">
-                         <!-- Tombol Submit -->
-                         <button class="w-100 btn btn-primary btn-lg mt-3" type="submit">Lanjutkan Pembayaran</button>
-                         </form>
+                        <input type="hidden" name="total_harga" value="<?= $tot['tot'] ?>">
+                        <input type="hidden" name="produkId" value="<?= implode(',', $produkId) ?>">
+                        <input type="hidden" name="jmlBeli" value="<?= implode(',', $jmlBeli) ?>">
+                        <!-- Tombol Submit -->
+                        <button class="w-100 btn btn-primary btn-lg mt-3" type="submit">Lanjutkan Pembayaran</button>
+                        </form>
                     </div>
                 </div>
-                </div>
             </div>
-
         </div>
+
+    </div>
     </div>
     <script src="../../assets/libs/jquery/dist/jquery.min.js"></script>
     <script src="../../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

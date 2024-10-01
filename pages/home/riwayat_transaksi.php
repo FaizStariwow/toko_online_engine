@@ -57,7 +57,7 @@
                                         <thead>
                                             <tr>
                                                 <th>No</th>
-                                                <th>Produk</th>
+                                                <th>Nama User</th>
                                                 <th>Tanggal Transaksi</th>
                                                 <th>Total</th>
                                                 <th>Status</th>
@@ -76,7 +76,7 @@
                                             ?>
                                                 <tr>
                                                     <td><?= $no++ ?></td>
-                                                    <td><?= $data['produk'] ?></td>
+                                                    <td><?= $data['nama_user'] ?></td>
                                                     <td><?= $data['tgl_transaksi'] ?></td>
                                                     <td><?= $data['total_harga'] ?></td>
                                                     <td>
@@ -125,7 +125,7 @@
                     <div class="row">
                         <div class="col-md-4">
                             <p class="fw-bold">Nama Pembeli</p>
-                            <p class="fw-bold">Produk</p>
+                            <p class="fw-bold">Nama User</p>
                             <p class="fw-bold">Metode Pembayaran</p>
                             <p class="fw-bold">Qty</p>
                             <p class="fw-bold">Tanggal Transaksi</p>
@@ -135,7 +135,7 @@
                         </div>
                         <div class="col-md-3">
                             <p id="nama_pembeli"></p>
-                            <p id="produk"></p>
+                            <p id="nama_user"></p>
                             <p id="metode_pembayaran"></p>
                             <p id="qty"></p>
                             <p id="tgl_transaksi"></p>

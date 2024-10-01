@@ -30,7 +30,7 @@ include '../../action/dashboard/show_detail_produk.php';
             <div class="container-fluid">
                 <div class="row px-xl-5">
                     <div class="col-lg-5 pb-5">
-                        <img src="../../assets/images/produk/<?= $data['foto_produk']?>" class="img-fluid" alt="">
+                        <img src="../../assets/images/produk/<?= $data['foto_produk'] ?>" class="img-fluid" alt="">
                     </div>
 
                     <div class="col-lg-7 pb-5">
@@ -45,24 +45,34 @@ include '../../action/dashboard/show_detail_produk.php';
                             </div>
                             <small class="pt-1">(50 Reviews)</small>
                         </div>
-                        <h3 class="font-weight-semi-bold mb-4">Rp.<?= number_format($data['harga'], 0, ',', '.')?></h3>
-                        <p class="mb-4"><?= $data['deskripsi']?></p>
-                      
+                        <h3 class="font-weight-semi-bold mb-4">Rp.<?= number_format($data['harga'], 0, ',', '.') ?></h3>
+                        <p class="mb-4"><?= $data['deskripsi'] ?></p>
+
                         <div class="d-flex align-items-center mb-4 pt-2">
                             <!-- make form quantity -->
-                             <form action="../../action/dashboard/add_cart.php" class="d-flex" method="post">
-                                 <button class="btn btn-primary mx-3" type="button" id="minus"><i class="ti ti-minus"></i></button>
-                                 <input class="form-control" type="text" name="qty" id="qty" style="width: 50px;" value="1">
-                                 <button class="btn btn-primary mx-3" type="button" id="plus"><i class="ti ti-plus"></i></button>
-                                 <button class="btn btn-primary px-3" type="submit"><i class="ti ti-shopping-cart mr-1"></i> Add To Cart</button>
-                                <input type="hidden" name="id" value="<?= $data['id']?>">
-                                <input type="hidden" name="harga" value="<?= $data['harga']?>">
-                             </form>
+                            <form action="../../action/dashboard/add_cart.php" class="d-flex" method="post">
+                                <button class="btn btn-primary mx-3" type="button" id="minus"><i class="ti ti-minus"></i></button>
+                                <input class="form-control" type="text" name="qty" id="qty" style="width: 50px;" value="1">
+                                <button class="btn btn-primary mx-3" type="button" id="plus"><i class="ti ti-plus"></i></button>
+
+                                <?php
+                                if ($data['stok_produk'] == 0) {
+                                ?>
+                                    <button class="btn btn-danger px-3" id="add-to-cart" type="submit" disabled>STOK HABIS</button>
+                                <?php
+                                } else {
+                                ?>
+                                    <button class="btn btn-primary px-3" id="add-to-cart" type="submit"><i class="ti ti-shopping-cart mr-1"></i> Add To Cart</button>
+                                <?php } ?>
+
+                                <input type="hidden" name="id" value="<?= $data['id'] ?>">
+                                <input type="hidden" name="harga" value="<?= $data['harga'] ?>">
+                            </form>
                         </div>
-                       
+
                     </div>
                 </div>
-           
+
             </div>
         </div>
     </div>
@@ -73,14 +83,14 @@ include '../../action/dashboard/show_detail_produk.php';
     <script src="../../assets/libs/simplebar/dist/simplebar.js"></script>
     <script>
         $(document).ready(function() {
-            var qty = 1; 
+            var qty = 1;
             $('#plus').click(function() {
                 qty += 1;
                 $('#qty').val(qty);
             });
-            
+
             $('#minus').click(function() {
-                if (qty > 1){
+                if (qty > 1) {
                     qty -= 1;
                     $('#qty').val(qty);
                 }
