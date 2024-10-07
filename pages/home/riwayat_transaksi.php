@@ -111,46 +111,71 @@
     </div>
 
    
-
-    <!-- Modal Detail Transaksi -->
-    <div class="modal fade" id="detailTransaksi" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+     <!-- Modal Detail -->
+     <div class="modal fade" id="detailTransaksi" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Detail Transaksi</h5>
-                    <!-- button close -->
-                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Detail Transaksi</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-md-4">
-                            <p class="fw-bold">Nama Pembeli</p>
-                            <p class="fw-bold">Nama User</p>
-                            <p class="fw-bold">Metode Pembayaran</p>
-                            <p class="fw-bold">Qty</p>
-                            <p class="fw-bold">Tanggal Transaksi</p>
+                        <div class="col-md-6">
+                            <p class="fw-bold">Pembeli</p>
+                            <p class="fw-bold">No. Hp</p>
+                            <p class="fw-bold">Pembayaran</p>
                             <p class="fw-bold">Alamat</p>
                             <p class="fw-bold">Total Harga</p>
+                            <p class="fw-bold">Tgl Transaksi</p>
                             <p class="fw-bold">Status</p>
                         </div>
-                        <div class="col-md-3">
-                            <p id="nama_pembeli"></p>
-                            <p id="nama_user"></p>
-                            <p id="metode_pembayaran"></p>
-                            <p id="qty"></p>
-                            <p id="tgl_transaksi"></p>
-                            <p id="alamat"></p>
-                            <p id="total_harga"></p>
+                        <div class="col-md-6">
+                            <p class="fw-bold" id="pembeli"></p>
+                            <p class="fw-bold" id="no_hp"></p>
+                            <p class="fw-bold" id="pembayaran"></p>
+                            <p class="fw-bold" id="alamat"></p>
+                            <p class="fw-bold" id="total"></p>
+                            <p class="fw-bold" id="tgl"></p>
                             <span id="status_pembayaran"></span>
                         </div>
-                        <div class="col-md-5">
-                            <img src="" id="foto_produk" width="150px" height="150px">
+                        <!-- <div class="col-md-5">
+                            <img src="" alt="" id="foto_produk" width="150px">
+                        </div> -->
+                        <div class="col-md-12">
+
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered no-wrap" id="tableDetail">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Produk</th>
+                                            <th>Harga</th>
+                                            <th>Qty</th>
+                                            <th>Total Harga</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>No</td>
+                                            <td>Produk</td>
+                                            <td>Harga</td>
+                                            <td>Qty</td>
+                                            <td>Total Harga</td>
+                                        </tr>
+
+                                    </tbody>
+                            </div>
                         </div>
+
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
 
     <script src="../../assets/libs/jquery/dist/jquery.min.js"></script>
     <script src="../../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -164,19 +189,19 @@
             var a = $(event.relatedTarget);
             var id = a.data('id');
             var status = a.data('status');
+            console.log(id);
 
             var modal = $(this);
             modal.find('.modal-body #id').val(id);
             modal.find('.modal-body #status').val(status);
-        });
+        })
 
         $('#detailTransaksi').on('show.bs.modal', function(event) {
             var a = $(event.relatedTarget);
             var id = a.data('id');
-
             $.ajax({
                 type: 'post',
-                url: '../../action/transaksi_action/detail_transaksi.php',
+                url: '../../action/transaksi/show_detail.php',
                 data: {
                     id: id
 
@@ -184,34 +209,73 @@
                 success: function(data) {
                     var obj = JSON.parse(data);
                     console.log(obj);
-                    $('#nama_pembeli').html(obj.pembeli);
-                    $('#produk').html(obj.produk);
-                    $('#metode_pembayaran').html(obj.pembayaran);
-                    $('#qty').html(obj.qty);
-                    $('#tgl_transaksi').html(obj.tgl_transaksi);
-                    $('#alamat').html(obj.alamat);
-                    $('#total_harga').html(obj.total_harga);
+                    $('#pembeli').html(obj.pembeli);
+                    $('#no_hp').html(obj.no_hp);
+                    $('#pembayaran').html(obj.pembayaran);
+                    $('#tgl').html(obj.tgl_transaksi);
+                    $('#alamat').html(obj.alamat_pengiriman);
+                    $('#total').html(obj.total_harga);
+                    $('#status_pembayaran').html(obj.status);
 
                     // status
-                    if(obj.status == 1){
-                        $('#status_pembayaran').attr('class','badge bg-warning rounded-3 fw-semibold').html('Pending');
+                    if (obj.status == 1) {
+                        $('#status_pembayaran').attr('class', 'badge bg-warning rounded-3 fw-semibold').html('Pending');
                     }
-                    if(obj.status == 2){
-                        $('#status_pembayaran').attr('class','badge bg-success rounded-3 fw-semibold').html('Success');
-                    }else{
-                        $('#status_pembayaran').attr('class','badge bg-danger rounded-3 fw-semibold').html('Failed');
+                    if (obj.status == 2) {
+                        $('#status_pembayaran').attr('class', 'badge bg-success rounded-3 fw-semibold').html('Success');
+                    } else {
+                        $('#status_pembayaran').attr('class', 'badge bg-danger rounded-3 fw-semibold').html('Failed');
                     }
 
                     // image
-                    $('#foto_produk').attr('src', '../../assets/images/produk/' + obj.foto_produk);
+                    // $('#foto_produk').attr('src', '../../assets/images/produk/' + obj.foto_produk);
+
+                },
+
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+
+            $.ajax({
+                type: 'post',
+                url: '../../action/transaksi_action/show_item_transaksi.php',
+                data: {
+                    id: id
+
+                },
+                success: function(data) {
+                    var obj = JSON.parse(data);
+                    console.log(obj);
+
+                    var table = document.getElementById('tableDetail');
+                    var tableBody = table.getElementsByTagName('tbody')[0];
+                    if (obj.length == 0) {
+                        // clear table
+                        tableBody.innerHTML = 'Data Tidak Ada';
+                    } else if (obj.length > 0) {
+                        tableBody.innerHTML = '';
+                        obj.forEach(item => {
+                            var newRow = tableBody.insertRow(tableBody.rows.length);
+                            newRow.insertCell(0).innerHTML = obj.indexOf(item) + 1;
+                            newRow.insertCell(1).innerHTML = item.produk;
+                            newRow.insertCell(2).innerHTML = item.harga;
+                            newRow.insertCell(3).innerHTML = item.jml_beli;
+                            newRow.insertCell(4).innerHTML = item.total_harga;
+
+                        });
+                    }
+
                 },
                 error: function(error) {
                     console.log(error);
                 }
             });
-        });
 
+
+        });
     </script>
+
 
 </body>
 

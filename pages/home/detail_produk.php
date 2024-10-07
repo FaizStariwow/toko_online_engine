@@ -70,6 +70,19 @@ include '../../action/dashboard/show_detail_produk.php';
                             </form>
                         </div>
 
+                        <h6>Ulasan Produk:</h6>
+                        <!-- Ulasan 1 -->
+                        <div class="border p-2 mb-2">
+                            <p><strong>Pengguna A</strong> <small>(5/5)</small></p>
+                            <p>Produk ini sangat bagus, kualitasnya sesuai dengan harga. Pengiriman juga cepat.</p>
+                        </div>
+
+                        <!-- Form Ulasan Baru -->
+                        <div class="form-group">
+                            <textarea class="form-control" rows="3" placeholder="Tulis ulasan Anda di sini..."></textarea>
+                        </div>
+                        <button class="btn btn-primary btn-sm" type="submit">Kirim Ulasan</button>
+
                     </div>
                 </div>
 
