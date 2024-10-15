@@ -1,7 +1,8 @@
 <?php
 // session_start();
 include '../../action/security.php';
-include '../../action/dashboard/show_detail_produk.php';
+
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -28,7 +29,11 @@ include '../../action/dashboard/show_detail_produk.php';
             <!--  Header End -->
             <!-- Content -->
             <div class="container-fluid">
+                <a href="./produk.php" class="btn btn-primary mb-3"><i class="ti ti-arrow-left"></i></a>
                 <div class="row px-xl-5">
+                    <?php
+                    include '../../action/dashboard/show_detail_produk.php';
+                    ?>
                     <div class="col-lg-5 pb-5">
                         <img src="../../assets/images/produk/<?= $data['foto_produk'] ?>" class="img-fluid" alt="">
                     </div>
@@ -36,13 +41,7 @@ include '../../action/dashboard/show_detail_produk.php';
                     <div class="col-lg-7 pb-5">
                         <h3 class="font-weight-semi-bold"><?= $data['nama'] ?></h3>
                         <div class="d-flex mb-3">
-                            <div class="text-primary mr-2">
-                                <small class="fas fa-star"></small>
-                                <small class="fas fa-star"></small>
-                                <small class="fas fa-star"></small>
-                                <small class="fas fa-star-half-alt"></small>
-                                <small class="far fa-star"></small>
-                            </div>
+
                             <small class="pt-1">(50 Reviews)</small>
                         </div>
                         <h3 class="font-weight-semi-bold mb-4">Rp.<?= number_format($data['harga'], 0, ',', '.') ?></h3>
@@ -70,18 +69,83 @@ include '../../action/dashboard/show_detail_produk.php';
                             </form>
                         </div>
 
-                        <h6>Ulasan Produk:</h6>
-                        <!-- Ulasan 1 -->
-                        <div class="border p-2 mb-2">
-                            <p><strong>Pengguna A</strong> <small>(5/5)</small></p>
-                            <p>Produk ini sangat bagus, kualitasnya sesuai dengan harga. Pengiriman juga cepat.</p>
-                        </div>
+
 
                         <!-- Form Ulasan Baru -->
-                        <div class="form-group">
-                            <textarea class="form-control" rows="3" placeholder="Tulis ulasan Anda di sini..."></textarea>
-                        </div>
-                        <button class="btn btn-primary btn-sm" type="submit">Kirim Ulasan</button>
+                        <form action="../../action/dashboard/insert_ulasan.php" method="post">
+
+                            <div class="form-group mb-2 mt-5">
+                                <label for="exampleInputPassword1" class="form-label">Ulasan</label>
+                                <textarea class="form-control" rows="3" placeholder="Tulis ulasan Anda di sini..." name="ulasan"></textarea>
+                                <label for="exampleInputPassword1" class="form-label">Rating</label>
+                                <div class="dropdown mb-3" >
+                                        <select name="rating" id="" class="form-select">
+                                            <option value="">Beri Rating</option>
+                                            <option value="5">Sangat Bagus</option>
+                                            <option value="4">Bagus</option>
+                                            <option value="3">Biasa</option>
+                                            <option value="2">Jelek</option>
+                                            <option value="1">Sangat Jelek</option>
+                                            
+                                        </select>
+                                    
+                                </div>
+                                <label for="exampleInputPassword1" class="form-label">Foto Ulasan</label>
+                                <input type="file" class="form-control" id="image" name="foto_ulasan">
+                                <div class="mt-3" id="gambar"></div>
+                            </div>
+                            <input type="hidden" name="produk" value="<?= $data['id'] ?>">
+                            <div class="mb-4">
+                                <button class="btn btn-primary btn-sm mb-5" type="submit">Kirim Ulasan</button>
+                            </div>
+                            
+
+                            <div class="form-group mb-2">
+                                <label for="exampleInputPassword1" class="form-label">Ulasan Para Pembeli</label>
+                                <!-- Ulasan 1 -->
+                              
+                        <?php  
+                            include '../../connection/connection.php';
+                            $produk_id = $data['id'];
+                            $ulasan_sql = "SELECT ulasan.id, ulasan.ulasan, ulasan.foto_ulasan, ulasan.rating, user.nama AS nama_user
+                            FROM ulasan
+                            JOIN user ON ulasan.user_id = user.id
+                            WHERE ulasan.produk_id = $produk_id
+                            ";
+                            $result = $conn->query($ulasan_sql);
+                            if ($result->num_rows > 0) {
+                                while ($ulasan = $result->fetch_assoc()) { ?>
+                                    <div class="card mb-3">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><?= $ulasan['nama_user'] ?></h5>
+                                        <div class="d-flex  list-unstyled">
+                                            <p class="card-text">Rating: <?php 
+                                            $rating = $ulasan['rating'];
+                                            for ($i=1; $i <= 5; $i++) { 
+                                                if ($i <= $rating) {
+                                                    echo "<li><a class='me-1' href='javascript:void(0)'><i class='ti ti-star text-warning'></i></a></li>";
+                                                }
+                                            }
+                                            ?>
+                                            </p>
+                                        </div>
+                                        <p class="card-text"><?= $ulasan['ulasan'] ?></p>
+                                        <div class="mt-2 d-flex flex-column">
+                                            <label for="exampleInputtext1" class="form-label">Foto Ulasan</label>
+                                            <img src="../../assets/images/produk/<?= $ulasan['foto_ulasan'] ?>" alt="" style="width: 100px;">
+                                        </div>
+                                    </div>
+                                </div>
+                                <?php
+                                }
+                                
+                            } else { 
+                                echo " <br> Belum ada ulasan terkait produk ini";
+                            }?>
+                            </div>
+                            
+                                
+                        </form>
 
                     </div>
                 </div>
@@ -110,7 +174,18 @@ include '../../action/dashboard/show_detail_produk.php';
             });
         });
     </script>
+    <script>
+        const image = document.getElementById('image');
+        image.addEventListener('change', function() {
+            const file = this.files[0];
+            console.log(file);
+            if (file) {
+                const foto = document.getElementById('gambar');
+                foto.innerHTML = `<img src="${URL.createObjectURL(file)}" width="100px" height="100px" alt="">`;
+            }
 
+        });
+    </script>
 </body>
 
 </html>

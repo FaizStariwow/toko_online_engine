@@ -11,12 +11,12 @@ $stok = $_POST['stok'];
 if ($_FILES['foto']) {
     $nama_file = $_FILES['foto']['name'];
     $source = $_FILES['foto']['tmp_name'];
-    $folder = 'C:\laragon\www\toko_online\assets\images\produk\\';
+    $folder = 'C:\laragon\www\php_toko_online\assets\images\produk\\';
 
     move_uploaded_file($source, $folder. $nama_file);
 }
 
-$sql = "INSERT INTO produk VALUES (null,'$kategori','$nama' , '$harga', '$deskripsi','$foto','$stok')";
+$sql = "INSERT INTO produk VALUES (null,'$kategori','$nama' , '$harga', '$deskripsi', '$foto','$stok')";
 
 if($conn->query($sql) == true){
     session_start();

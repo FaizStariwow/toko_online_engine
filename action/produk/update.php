@@ -11,16 +11,18 @@ $deskripsi = $_POST['deskripsi'];
 $foto = $_FILES['foto']['name'];
 $stok = $_POST['stok'];
 
-if ($_FILES['foto']) {
+if (isset($_FILES['foto']) && $foto != '') {
     $nama_file = $_FILES['foto']['name'];
     $source = $_FILES['foto']['tmp_name'];
-    $folder = 'C:\laragon\www\toko_online\assets\images\produk\\';
+    $folder = 'C:\laragon\www\php_toko_online\assets\images\produk\\';
 
     move_uploaded_file($source, $folder. $nama_file);
+    $sql = "UPDATE produk SET  kategori_produk_id = $kategori, nama = '$nama', harga = $harga, deskripsi = '$deskripsi', foto_produk = '$foto', stok_produk = $stok WHERE id = $id";
+}else{
+    $sql = "UPDATE produk SET  kategori_produk_id = $kategori, nama = '$nama', harga = $harga, deskripsi = '$deskripsi', stok_produk = $stok WHERE id = $id";
 }
 
 // query
-$sql = "UPDATE produk SET  kategori_produk_id = $kategori, nama = '$nama', harga = $harga, deskripsi = '$deskripsi', foto_produk = '$foto', stok_produk = $stok WHERE id = $id";
 
 // jalankan query
 //responnya apa dan kemana

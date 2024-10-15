@@ -1,7 +1,8 @@
 <!doctype html>
 <html lang="en">
-<?php
+<?php 
 
+include '../../action/ulasan/show_data.php';
 include '../../action/security.php';
 ?>
 
@@ -15,7 +16,8 @@ include '../../action/security.php';
 
 <body>
     <!--  Body Wrapper -->
-    <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
+    <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+        data-sidebar-position="fixed" data-header-position="fixed">
         <!-- Sidebar Start -->
         <?php include '../layout/sidebar.php'; ?>
         <!--  Sidebar End -->
@@ -30,10 +32,8 @@ include '../../action/security.php';
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-body">
-                                <a href="./create.php" class="btn btn-success float-md-end">
-                                    Add User <i class="ti ti-plus"></i>
-                                </a>
-                                <h5 class="card-title d-flex justify-content-start">Tabel User</h5>
+                                
+                                <h5 class="card-title d-flex justify-content-start">Tabel Ulasan</h5>
 
                                 <?php
                                 if (isset($_SESSION['msg'])) {
@@ -60,38 +60,24 @@ include '../../action/security.php';
                                         <thead>
                                             <tr>
                                                 <th>No</th>
-                                                <th>Nama</th>
-                                                <th>Email</th>
-                                                <th>Username</th>
-                                                <th>Role</th>
-                                                <th>Action</th>
-
-
+                                                <th>Produk</th>
+                                                <th>Total Ulasan</th>
+                                                <th>Rating</th>
+                                                
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <?php
-                                            include '../../action/user/show_data.php';
-                                            $no = 1;
+                                            include '../../action/ulasan/show_data.php';
+                                            $no=1;
                                             while ($data = mysqli_fetch_assoc($result)) {
                                             ?>
                                                 <tr>
                                                     <td><?= $no++ ?></td>
-                                                    <td><?= $data['nama'] ?></td>
-                                                    <td><?= $data['email'] ?></td>
-                                                    <td><?= $data['username'] ?></td>
-
-                                                    <?php if ($data['role'] == 1) { ?>
-                                                        <td>Admin</td>
-                                                    <?php } else { ?>
-                                                        <td>User</td>
-                                                    <?php } ?>
-
-
-                                                    <td>
-                                                        <a href="edit.php?id=<?= $data['id'] ?>" class="btn btn-warning"><i class="ti ti-edit"></i></a>
-                                                        <a href="../../action/user/delete.php?id=<?= $data['id'] ?>" class="btn btn-danger" onclick="return confirmDelete(event, <?= $data['id'] ?>)"><i class="ti ti-trash"></i></a>
-                                                    </td>
+                                                    <td><?= $data['produk'] ?></td>
+                                                    <td><?= $data['jumlah_ulasan'] ?></td>
+                                                    <td><?= $data['rata_rata_rating'] ?></td>
+                                                    
                                                 </tr>
                                             <?php
                                             }
@@ -113,34 +99,6 @@ include '../../action/security.php';
     <script src="../../assets/js/sidebarmenu.js"></script>
     <script src="../../assets/js/app.min.js"></script>
     <script src="../../assets/libs/simplebar/dist/simplebar.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <script>
-        function confirmDelete(event, id) {
-            event.preventDefault();
-
-            Swal.fire({
-                title: "Are you sure?",
-                text: "You won't be able to revert this!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, delete it!"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Swal.fire({
-                        title: "Deleted!",
-                        text: "Your file has been deleted.",
-                        icon: "success"
-                    });
-                    setTimeout((result) => {
-                        window.location.href = '../../action/user/delete.php?id=' + id;
-                    }, 1500);
-                }
-            });
-        }
-    </script>
 </body>
 
 </html>

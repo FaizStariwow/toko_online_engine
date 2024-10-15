@@ -239,7 +239,7 @@
 
             $.ajax({
                 type: 'post',
-                url: '../../action/transaksi_action/show_item_transaksi.php',
+                url: '../../action/transaksi/show_item.php',
                 data: {
                     id: id
 
