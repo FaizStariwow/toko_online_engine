@@ -135,7 +135,7 @@ include '../../action/security.php';
                                                     <?php if (!empty($ulasan['foto_ulasan'])) { ?>
                                                         <img src="../../assets/images/ulasan/<?= $ulasan['foto_ulasan'] ?>" alt="Foto Ulasan" style="width: 100px;">
                                                     <?php } else { ?>
-                                                        <img src="https://fakeimg.pl/100x100?text=gada gambar" alt="Tidak ada gambar" style="width: 100px;">
+                                                        <img src="https://fakeimg.pl/100x100?text=no gambar" alt="Tidak ada gambar" style="width: 100px;">
                                                     <?php } ?>
                                                 </div>
                                             </div>
