@@ -7,28 +7,29 @@ $user_id = $_SESSION['id'];
 $produk_id = $_POST['produk'];
 $ulasan = $_POST['ulasan'];
 $rating = $_POST['rating'];
-$foto = $_FILES['foto_ulasan']['name'];
+$foto = '';
 
+if (!empty($_FILES['foto_ulasan']['name'])) {
+    $type = strtolower(pathinfo($_FILES['foto_ulasan']['name'], PATHINFO_EXTENSION));
+    $new_file = 'ulasan_' . date('YmdHis') . '.' . $type;
+    $folder = '../../assets/images/ulasan/';
 
-if ($foto) {
-    $nama_file = $_FILES['foto_ulasan']['name'];
-    $source = $_FILES['foto_ulasan']['tmp_name'];
-    $type = $_FILES['foto_ulasan']['type'];
-    $new_file = 'produk_'.date('dmYHis').'.'.$type;
-    $folder = 'C:\laragon\www\toko_online\assets\images\produk';
+    if (!file_exists($folder)) {
+        mkdir($folder, 0777, true);
+    }
 
-    move_uploaded_file($source, $folder. $nama_file);
+    if (!move_uploaded_file($_FILES['foto_ulasan']['tmp_name'], $folder . $new_file)) {
+        $_SESSION['msg_error'] = 'Gagal mengunggah foto ulasan';
+        header('location:../../pages/home/detail_produk.php?id=' . $produk_id);
+        exit();
+    }
+
+    $foto = $new_file;
 }
 
+$sql = "INSERT INTO ulasan (produk_id, user_id, ulasan, rating, foto_ulasan) VALUES (?, ?, ?, ?, ?)";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("iisss", $produk_id, $user_id, $ulasan, $rating, $foto);
 
-$sql = "INSERT INTO ulasan VALUES(null, '$produk_id', '$user_id', '$ulasan', '$rating', '$foto')" ;
-
-if($conn->query($sql) == true){
-    
-    $_SESSION['msg'] = 'Add Kategori Success';
-    header('location:../../pages/home/detail_produk.php?id=' . $produk_id);
-}else{
-    
-    $_SESSION['msg_error'] = 'Add Kategori Failed';
-    header('location:../../pages/kategori/detail produk.php');
-}
+$_SESSION['msg'] = $stmt->execute() ? 'Berhasil menambahkan ulasan' : 'Gagal menambahkan ulasan';
+header('location:../../pages/home/detail_produk.php?id=' . $produk_id);
