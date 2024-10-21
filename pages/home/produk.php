@@ -64,13 +64,7 @@ include '../../action/security.php';
                                 <small>Stok <?= $row['stok_produk'] == 0 ? 'Habis' : $row['stok_produk'] ?></small>
                                 <div class="d-flex align-items-center justify-content-between">
                                     <h6 class="fw-semibold fs-4 mb-0">Rp <?php echo number_format($row['harga'], 0, ',', '.'); ?></h6>
-                                    <ul class="list-unstyled d-flex align-items-center mb-0">
-                                        <?php
-                                        for ($i = 1; $i <= 5; $i++) {
-                                            echo '<li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>';
-                                        }
-                                        ?>
-                                    </ul>
+                                    
                                 </div>
                             </div>
                         </div>
