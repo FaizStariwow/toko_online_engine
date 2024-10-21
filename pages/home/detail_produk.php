@@ -98,57 +98,57 @@ include '../../action/security.php';
                             <div class="mb-4">
                                 <button class="btn btn-primary btn-sm mb-5" type="submit">Kirim Ulasan</button>
                             </div>
+                        </form>
 
+                        <div class="form-group mb-2">
+                            <label for="exampleInputPassword1" class="form-label">Ulasan Para Pembeli</label>
+                            <!-- Ulasan 1 -->
 
-                            <div class="form-group mb-2">
-                                <label for="exampleInputPassword1" class="form-label">Ulasan Para Pembeli</label>
-                                <!-- Ulasan 1 -->
-
-                                <?php
-                                include '../../connection/connection.php';
-                                $produk_id = $data['id'];
-                                $ulasan_sql = "SELECT ulasan.id, ulasan.ulasan, ulasan.foto_ulasan, ulasan.rating, user.nama AS nama_user
+                            <?php
+                            include '../../connection/connection.php';
+                            $produk_id = $data['id'];
+                            $ulasan_sql = "SELECT ulasan.id, ulasan.ulasan, ulasan.foto_ulasan, ulasan.rating, user.nama AS nama_user
                             FROM ulasan
                             JOIN user ON ulasan.user_id = user.id
                             WHERE ulasan.produk_id = $produk_id
                             ";
-                                $result = $conn->query($ulasan_sql);
-                                if ($result->num_rows > 0) {
-                                    while ($ulasan = $result->fetch_assoc()) { ?>
-                                        <div class="card mb-3">
-                                            <div class="card-body">
-                                                <h5 class="card-title"><?= $ulasan['nama_user'] ?></h5>
-                                                <div class="d-flex  list-unstyled">
-                                                    <p class="card-text">Rating: <?php
-                                                        $rating = $ulasan['rating'];
-                                                        for ($i = 1; $i <= 5; $i++) {
-                                                            if ($i <= $rating) {
-                                                                echo "<li><a class='me-1' href='javascript:void(0)'><i class='ti ti-star text-warning'></i></a></li>";
-                                                            }
-                                                        }
-                                                        ?>
-                                                    </p>
-                                                </div>
-                                                <p class="card-text"><?= $ulasan['ulasan'] ?></p>
-                                                <div class="mt-2 d-flex flex-column">
-                                                    <label for="exampleInputtext1" class="form-label">Foto Ulasan</label>
-                                                    <?php if (!empty($ulasan['foto_ulasan'])) { ?>
-                                                        <img src="../../assets/images/ulasan/<?= $ulasan['foto_ulasan'] ?>" alt="Foto Ulasan" style="width: 100px;">
-                                                    <?php } else { ?>
-                                                        <img src="https://fakeimg.pl/100x100?text=no gambar" alt="Tidak ada gambar" style="width: 100px;">
-                                                    <?php } ?>
-                                                </div>
+                            $result = $conn->query($ulasan_sql);
+                            if ($result->num_rows > 0) {
+                                while ($ulasan = $result->fetch_assoc()) { ?>
+                                    <div class="card mb-3">
+                                        <div class="card-body">
+                                            <h5 class="card-title"><?= $ulasan['nama_user'] ?></h5>
+                                            <div class="d-flex  list-unstyled">
+                                                <p class="card-text">Rating: <?php
+                                                                                $rating = $ulasan['rating'];
+                                                                                for ($i = 1; $i <= 5; $i++) {
+                                                                                    if ($i <= $rating) {
+                                                                                        echo "<li><a class='me-1' href='javascript:void(0)'><i class='ti ti-star text-warning'></i></a></li>";
+                                                                                    }
+                                                                                }
+                                                                                ?>
+                                                </p>
+                                            </div>
+                                            <p class="card-text"><?= $ulasan['ulasan'] ?></p>
+                                            <div class="mt-2 d-flex flex-column">
+                                                <label for="exampleInputtext1" class="form-label">Foto Ulasan</label>
+                                                <?php if (!empty($ulasan['foto_ulasan'])) { ?>
+                                                    <img src="../../assets/images/ulasan/<?= $ulasan['foto_ulasan'] ?>" alt="Foto Ulasan" style="width: 100px;">
+                                                <?php } else { ?>
+                                                    <img src="https://fakeimg.pl/100x100?text=no gambar" alt="Tidak ada gambar" style="width: 100px;">
+                                                <?php } ?>
                                             </div>
                                         </div>
-                                <?php
-                                    }
-                                } else {
-                                    echo " <br> Belum ada ulasan terkait produk ini";
-                                } ?>
-                            </div>
+                                    </div>
+                            <?php
+                                }
+                            } else {
+                                echo " <br> Belum ada ulasan terkait produk ini";
+                            } ?>
+                        </div>
 
 
-                        </form>
+
 
                     </div>
                 </div>
