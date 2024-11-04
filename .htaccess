@@ -1,0 +1,9 @@
+# Enable Rewrite Engine
+RewriteEngine On
+
+# Redirect root domain to /pages/login_view.php
+RewriteCond %{REQUEST_URI} ^/$
+RewriteRule ^$ /pages/login_view.php [L,R=302]
+
+# Custom 404 Not Found Error Page
+ErrorDocument 404 https://profreehost.com/404/index.php

@@ -1,49 +1,40 @@
-<?php
-//make create user to database
+<?php 
+// untuk menggabungkan file connection.php
 include '../connection/connection.php';
 
-//get data from formnya 
+session_start();
+// get data from formnya
 $username = $_POST['username'];
 $password = $_POST['password'];
 
-// action for insert data to database
+// action for check data from database
 $sql = "SELECT * FROM user WHERE username = '$username' AND password = '$password'";
 
 $result = $conn->query($sql);
-
-// session_start();
-// $_SESSION['username'] = $result['username'];
-// $_SESSION['name'] = $result['name'];
-// $_SESSION['email'] = $result['email'];
-// $_SESSION['loggedin'] = true;
-
-if ($result->num_rows > 0) {
+$_SESSION['is_login'] = false;
+if($result->num_rows > 0){
     $data = $result->fetch_assoc();
-    if ($data['role'] == 1) {
-        session_start();
+    if($data['role'] == 1){
         $_SESSION['id'] = $data['id'];
         $_SESSION['is_login'] = true;
         $_SESSION['nama'] = $data['nama'];
         $_SESSION['email'] = $data['email'];
         $_SESSION['role'] = $data['role'];
         echo "<script>alert('Login Success, Anda Sebagai Admin');</script>";
-        echo "<script>location.href='../pages/layout/layout.php';</script>";
-    } elseif ($data['role'] == 2) {
-        session_start();
+        echo header('location: ../pages/layout/layout.php');
+    }elseif($data['role'] == 2){
         $_SESSION['id'] = $data['id'];
         $_SESSION['is_login'] = true;
         $_SESSION['nama'] = $data['nama'];
         $_SESSION['email'] = $data['email'];
         $_SESSION['role'] = $data['role'];
         echo "<script>alert('Login Success, Anda Sebagai User');</script>";
-        echo "<script>location.href='../pages/home/index.php';</script>";
+        echo "<script>location.href = '../pages/home/index.php';</script>";
     }
-} else {
-    session_start();
-    $_SESSION['message'] = "Username and Password is wrong";
 
+}else{
+    session_start();
+    $_SESSION['message'] = "Username or Password is wrong";
     return header('location: ../pages/login_view.php');
 }
-
-
-echo $result;
+?>

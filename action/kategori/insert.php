@@ -4,7 +4,7 @@ include '../../connection/connection.php';
 
 $name = $_POST['name'];
 
-$sql = "INSERT INTO kategori_produk VALUES(null, '$name')" ;
+$sql = "INSERT INTO kategori VALUES(null, '$name')" ;
 
 if($conn->query($sql) == true){
     session_start();
